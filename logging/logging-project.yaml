@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: logging
+  namespace: argocd
+spec:
+  destinations:
+  - namespace: argocd
+    server: https://kubernetes.default.svc
+  - namespace: logging
+    server: https://kubernetes.default.svc
+  sourceRepos:
+  - https://github.com/KiraPixel/lksp-infra.git
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+  namespaceResourceWhitelist:
+  - group: '*'
+    kind: '*'

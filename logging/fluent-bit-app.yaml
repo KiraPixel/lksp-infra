@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: fluent-bit
-  namespace: logging
+  namespace: argocd
 spec:
   destination:
     namespace: logging
@@ -12,7 +12,7 @@ spec:
     repoURL: https://github.com/KiraPixel/lksp-infra.git
     targetRevision: HEAD
   sources: []
-  project: default
+  project: logging
   syncPolicy:
     automated:
       prune: true

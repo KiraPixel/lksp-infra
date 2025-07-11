@@ -61,6 +61,6 @@ data:
     [OUTPUT]
         Name              gelf
         Match             kubernetes.*
-        Host              192.168.201.140:9100
+        Host              192.168.201.140
         Port              12201
         Gelf_Short_Message_Key log
