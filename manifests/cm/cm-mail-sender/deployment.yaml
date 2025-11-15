@@ -15,7 +15,7 @@ spec:
         app: mail-sender
     spec:
       containers:
-        - name: report-generator
+        - name: mail-sender
           image: ghcr.io/kirapixel/cm-mail-sender:20251115184951
           envFrom:
             - secretRef:
