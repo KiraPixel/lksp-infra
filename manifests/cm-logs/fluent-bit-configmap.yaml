@@ -12,29 +12,37 @@ data:
         Parsers_File parsers.conf
 
     [INPUT]
-        Name              tail
-        Path              /var/log/containers/*.log
-        Parser            docker
-        Tag               kube.*
-        Refresh_Interval  5
-        DB                /var/log/flb_kube.db
-        Mem_Buf_Limit     5MB
-        Skip_Long_Lines   On
+        Name   tail
+        Path   /var/log/containers/*.log
+        Parser docker_short
+        Tag    kube.*
 
     [FILTER]
         Name                kubernetes
         Match               kube.*
-        Kube_URL            https://kubernetes.default.svc:443
         Merge_Log           On
+        Merge_Log_Key       log
         Keep_Log            Off
         K8S-Logging.Parser  On
         K8S-Logging.Exclude On
-        K8S-Logging.Namespace prd-cm
+        Kube_URL            https://kubernetes.default.svc:443
 
     [OUTPUT]
-        Name          loki
-        Match         *
-        Host          loki.monitoring.svc.cluster.local
-        Port          3100
-        Labels        {namespace="prd-cm", job="fluentbit"}
-        RemoveKeys    kubernetes
+        Name                 gelf
+        Match                *
+        Host                 logs.cm.lk-sp.ru
+        Port                 12201
+        Mode                 udp
+        Gelf_Short_Message_Key log
+        Gelf_Full_Message_Key  log
+        Gelf_Host_Key          kubernetes.pod_name
+        Gelf_Level_Key         level
+        Gelf_Timestamp_Key     time
+
+  parsers.conf: |
+    [PARSER]
+        Name   docker_short
+        Format json
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Decode_Field_As   escaped   log
