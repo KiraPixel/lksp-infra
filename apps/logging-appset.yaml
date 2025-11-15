@@ -1,31 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
+kind: Application
 metadata:
-  name: logging-appset
+  name: cm-logs
   namespace: argocd
 spec:
-  generators:
-    - git:
-        repoURL: https://github.com/KiraPixel/lksp-infra.git
-        revision: HEAD
-        directories:
-          - path: manifests/logging
-  template:
-    metadata:
-      name: '{{.path.basename}}'
-    spec:
-      project: logging
-      source:
-        repoURL: https://github.com/KiraPixel/lksp-infra.git
-        targetRevision: HEAD
-        path: '{{.path }}'
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: logging
-      syncPolicy:
-        automated:
-          prune: false
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
-  goTemplate: true
+  project: cm
+  source:
+    repoURL: https://github.com/KiraPixel/lksp-infra.git
+    targetRevision: HEAD
+    path: manifests/cm-logs
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: fluentbit
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
