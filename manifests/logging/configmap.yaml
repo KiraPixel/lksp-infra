@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: logging
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+        HTTP_Server   On  # Для metrics, если нужно мониторить
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+
+    [INPUT]
+        Name                tail
+        Tag                 kube.*
+        Path                /var/log/containers/*.log
+        DB                  /fluent-bit/db/tail-containers.db  # Для сохранения позиции чтения
+        Mem_Buf_Limit       50MB  # Лимит памяти, чтобы не переполняться
+        Multiline.Parser    docker, cri  # Для многострочных логов в K8s
+        Refresh_Interval    10  # Проверка новых файлов
+        Skip_Long_Lines     On  # Пропускать слишком длинные строки
+        Skip_Empty_Lines    On  # Игнорировать пустые
+
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Merge_Log           On  # Сливать JSON-логи в структуру
+        Merge_Log_Key       log_processed  # Ключ для слитых полей
+        Keep_Log            Off  # Не хранить оригинальный log после слияния
+        K8S-Logging.Parser  On  # Парсинг K8s-логов
+        K8S-Logging.Exclude Off  # Не исключать по умолчанию (настраивай аннотациями на подах)
+        Labels              On  # Добавлять лейблы подов
+        Annotations         Off  # Аннотации — опционально, если не нужны
+
+    [OUTPUT]
+        Name                    gelf
+        Match                   kube.*
+        Host                    192.168.201.140
+        Port                    12201
+        Mode                    tcp  # Или udp, если Graylog на UDP
+        Compress                gzip  # Сжатие для экономии трафика
+        Gelf_Short_Message_Key  log_processed  # Ключ для основного сообщения (после фильтра)
+
+  parsers.conf: |  # Парсеры для распространённых форматов
+    [PARSER]
+        Name        docker
+        Format      json
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep   On
+
+    [PARSER]
+        Name        cri
+        Format      regex
+        Regex       ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%NZ
+
+    [PARSER]  # Пример для JSON-логов
+        Name        json
+        Format      json
+        Time_Key    time
+        Time_Format %d/%b/%Y:%H:%M:%S %z

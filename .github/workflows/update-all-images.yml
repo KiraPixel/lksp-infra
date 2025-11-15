@@ -1,0 +1,84 @@
+name: Update CM Image Tags
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update-images:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: read
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - name: Install yq
+        run: |
+          wget https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64 -O ~/yq
+          chmod +x ~/yq
+          echo "$HOME" >> $GITHUB_PATH
+
+      - name: Set git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions@github.com"
+
+      - name: Update deployment files
+        run: |
+          SERVICES=(
+            "cm-mail-sender:ghcr.io/kirapixel/cm-mail-sender:manifests/cm/cm-mail-sender/deployment.yaml"
+            "cm-report-generator:ghcr.io/kirapixel/cm-report-generator:manifests/cm/cm-report-generator/deployment.yaml"
+            "cm-virtual-operator:ghcr.io/kirapixel/cm-virtual-operator:manifests/cm/cm-virtual-operator/deployment.yaml"
+            "cm-xml-1c-parsers:ghcr.io/kirapixel/cm-xml-1c-parsers:manifests/cm/cm-xml-1c-parsers/deployment.yaml"
+            "flask-cm-spectr:ghcr.io/kirapixel/flask-cm-spectr:manifests/cm/flask-cm-spectr/deployment.yaml"
+            "flask-db-cashing:ghcr.io/kirapixel/flask-db-cashing:manifests/cm/flask-db-cashing/deployment.yaml"
+          )
+
+          for svc in "${SERVICES[@]}"; do
+            IFS=":" read -r NAME IMAGE DEPLOY <<< "$svc"
+            PACKAGE=$(echo "$IMAGE" | awk -F'/' '{print $NF}')
+
+            RESPONSE=$(curl -s -H "Authorization: Bearer ${{ secrets.GH_PAT }}" \
+                      -H "Accept: application/vnd.github.v3+json" \
+                      "https://api.github.com/users/kirapixel/packages/container/$PACKAGE/versions")
+
+            # Проверяем, что API вернул массив версий
+            if echo "$RESPONSE" | jq -e 'type=="array"' >/dev/null; then
+              TAG=$(echo "$RESPONSE" | jq -r '.[0].metadata.container.tags[0] // empty')
+            else
+              echo "❌ No versions found for $PACKAGE"
+              continue
+            fi
+
+            if [ -z "$TAG" ]; then
+              echo "❌ No tag found for $PACKAGE"
+              continue
+            fi
+
+            NEW_IMAGE="$IMAGE:$TAG"
+            CURRENT=$(~/yq eval '.spec.template.spec.containers[0].image' "$DEPLOY")
+
+            if [ "$CURRENT" != "$NEW_IMAGE" ]; then
+              echo "Updating $NAME from $CURRENT to $NEW_IMAGE"
+              ~/yq eval ".spec.template.spec.containers[0].image = \"$NEW_IMAGE\"" "$DEPLOY" > tmp.yaml
+              mv tmp.yaml "$DEPLOY"
+              git add "$DEPLOY"
+            else
+              echo "$NAME is already up to date ($CURRENT)"
+            fi
+          done
+
+          # Делаем один коммит и пуш, если что-то изменилось
+          if git diff --cached --quiet; then
+            echo "All tags are up to date"
+          else
+            git commit -m "chore: update CM image tags"
+            git push origin main
+          fi

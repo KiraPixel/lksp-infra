@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: report-generator
+  namespace: prd-cm
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: report-generator
+  template:
+    metadata:
+      labels:
+        app: report-generator
+    spec:
+      containers:
+        - name: report-generator
+          image: ghcr.io/kirapixel/cm-report-generator:20251114125737
+          envFrom:
+            - secretRef:
+                name: flask-cm-spectr-secret

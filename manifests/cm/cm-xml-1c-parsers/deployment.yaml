@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xml-1c-parser
+  namespace: prd-cm
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: xml-1c-parser
+  template:
+    metadata:
+      labels:
+        app: xml-1c-parser
+    spec:
+      containers:
+        - name: xml-1c-parser
+          image: ghcr.io/kirapixel/cm-xml-1c-parser:20250827150508
+          envFrom:
+            - secretRef:
+                name: flask-cm-spectr-secret

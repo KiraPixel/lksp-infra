@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-cm-spectr
+  namespace: prd-cm
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: flask-cm-spectr
+  template:
+    metadata:
+      labels:
+        app: flask-cm-spectr
+    spec:
+      containers:
+        - name: flask-cm-spectr
+          image: ghcr.io/kirapixel/flask-cm-spectr:20251115184042
+          ports:
+            - containerPort: 31500
+          envFrom:
+            - secretRef:
+                name: flask-cm-spectr-secret
