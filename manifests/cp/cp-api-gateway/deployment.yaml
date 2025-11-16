@@ -11,7 +11,8 @@ spec:
       app: cp-api-gateway
   template:
     metadata:
-      labels: app:cp-api-gateway
+      labels: 
+        app: cp-api-gateway
     spec:
       containers:
         - name: cp-api-gateway

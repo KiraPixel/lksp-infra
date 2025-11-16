@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: cp-api-gateway-service
   namespace: prd-cp
+  annotations:
+    argocd.argoproj.io/instance: cp-services
 spec:
   selector:
     app: cp-api-gateway
