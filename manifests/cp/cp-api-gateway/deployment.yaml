@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: cp-api-gateway
-          image: ghcr.io/kirapixel/cp-api-gateway:20251116143152
+          image: ghcr.io/kirapixel/cp-api-gateway:20251116145605
           ports:
             - containerPort: 31499
           envFrom:
