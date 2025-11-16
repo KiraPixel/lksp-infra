@@ -4,7 +4,8 @@ metadata:
   name: cp-api-gateway-service
   namespace: prd-cp
   annotations:
-    argocd.argoproj.io/instance: cp-services
+    argocd.argoproj.io/instance: cp-api-gateway-service
+    argocd.argoproj.io/tracking-id: cp-api-gateway-service:/Service:prd-cp/cp-api-gateway-service
 spec:
   selector:
     app: cp-api-gateway
