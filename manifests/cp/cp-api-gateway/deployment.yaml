@@ -11,12 +11,11 @@ spec:
       app: cp-api-gateway
   template:
     metadata:
-      labels:
-        app:cp-api-gateway
+      labels: app:cp-api-gateway
     spec:
       containers:
         - name: cp-api-gateway
-          image: ghcr.io/kirapixel/cp-api-gateway:20251115184042
+          image: ghcr.io/kirapixel/cp-api-gateway:20251116140226
           ports:
             - containerPort: 31499
           envFrom:
