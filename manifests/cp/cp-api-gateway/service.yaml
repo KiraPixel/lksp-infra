@@ -3,15 +3,12 @@ kind: Service
 metadata:
   name: cp-api-gateway-service
   namespace: prd-cp
-  annotations:
-    argocd.argoproj.io/instance: cp-api-gateway-service
-    argocd.argoproj.io/tracking-id: cp-api-gateway-service:/Service:prd-cp/cp-api-gateway-service
 spec:
   selector:
     app: cp-api-gateway
   ports:
     - protocol: TCP
-      port: 41998
+      port: 31998
       targetPort: 31499
-      nodePort: 41998
+      nodePort: 31998
   type: NodePort
