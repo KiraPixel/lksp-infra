@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: address-enrichment
-          image: ghcr.io/kirapixel/cm-address-enrichment:0
+          image: ghcr.io/kirapixel/cm-address-enrichment:20251120225056
           envFrom:
             - secretRef:
                 name: flask-cm-spectr-secret
