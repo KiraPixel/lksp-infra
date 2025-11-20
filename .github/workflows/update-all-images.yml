@@ -39,6 +39,7 @@ jobs:
             "cm-xml-1c-parsers:ghcr.io/kirapixel/cm-xml-1c-parsers:manifests/cm/cm-xml-1c-parsers/deployment.yaml"
             "flask-cm-spectr:ghcr.io/kirapixel/flask-cm-spectr:manifests/cm/flask-cm-spectr/deployment.yaml"
             "flask-db-cashing:ghcr.io/kirapixel/flask-db-cashing:manifests/cm/flask-db-cashing/deployment.yaml"
+            "cm-address-enrichment:ghcr.io/kirapixel/cm-address-enrichment:manifests/cm/cm-address-enrichment/deployment.yaml"
             "cp-api-gateway:ghcr.io/kirapixel/cp-api-gateway:manifests/cp/cp-api-gateway/deployment.yaml"
           )
 
