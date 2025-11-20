@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: address-enrichment
+  namespace: prd-cm
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: address-enrichment
+  template:
+    metadata:
+      labels:
+        app: address-enrichment
+    spec:
+      containers:
+        - name: address-enrichment
+          image: ghcr.io/kirapixel/cm-address-enrichment:0
+          envFrom:
+            - secretRef:
+                name: flask-cm-spectr-secret
