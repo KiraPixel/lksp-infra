@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: flask-cm-spectr
-          image: ghcr.io/kirapixel/flask-cm-spectr:20251124102439
+          image: ghcr.io/kirapixel/flask-cm-spectr:20251127215716
           ports:
             - containerPort: 31500
           envFrom:
