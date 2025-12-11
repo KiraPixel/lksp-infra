@@ -5,7 +5,7 @@ metadata:
   namespace: prd-cm
 spec:
   selector:
-    app: flask-cm-spectr
+    app: report-generator
   ports:
     - protocol: TCP
       port: 31800
