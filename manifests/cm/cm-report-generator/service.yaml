@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: report-generator-service
+  namespace: prd-cm
+spec:
+  selector:
+    app: flask-cm-spectr
+  ports:
+    - protocol: TCP
+      port: 31800
+      targetPort: 8000
+      nodePort: 31800
+  type: NodePort

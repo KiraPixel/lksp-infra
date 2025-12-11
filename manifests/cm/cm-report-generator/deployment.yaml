@@ -17,6 +17,8 @@ spec:
       containers:
         - name: report-generator
           image: ghcr.io/kirapixel/cm-report-generator:20251211084418
+          ports:
+            - containerPort: 8000
           envFrom:
             - secretRef:
                 name: flask-cm-spectr-secret
