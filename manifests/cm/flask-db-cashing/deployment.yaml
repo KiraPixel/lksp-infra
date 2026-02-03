@@ -4,7 +4,7 @@ metadata:
   name: db-cashing
   namespace: prd-cm
 spec:
-  replicas: 0
+  replicas: 1
   revisionHistoryLimit: 0
   selector:
     matchLabels:
