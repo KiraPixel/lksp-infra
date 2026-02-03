@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: report-generator
-          image: ghcr.io/kirapixel/cm-report-generator:20251222090943
+          image: ghcr.io/kirapixel/cm-report-generator:20260203112014
           ports:
             - containerPort: 8000
           envFrom:
