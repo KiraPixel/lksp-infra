@@ -40,6 +40,7 @@ jobs:
             "flask-cm-spectr:ghcr.io/kirapixel/flask-cm-spectr:manifests/cm/flask-cm-spectr/deployment.yaml"
             "flask-db-cashing:ghcr.io/kirapixel/flask-db-cashing:manifests/cm/flask-db-cashing/deployment.yaml"
             "cm-address-enrichment:ghcr.io/kirapixel/cm-address-enrichment:manifests/cm/cm-address-enrichment/deployment.yaml"
+            "google-scripts:ghcr.io/crystalmoonchan/g-script:manifests/cm/google-scripts/deployment.yaml"
             "cp-api-gateway:ghcr.io/kirapixel/cp-api-gateway:manifests/cp/cp-api-gateway/deployment.yaml"
           )
 

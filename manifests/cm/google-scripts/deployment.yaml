@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: google-scripts
+  namespace: prd-cm
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: google-scripts
+  template:
+    metadata:
+      labels:
+        app: google-scripts
+    spec:
+      containers:
+        - name: google-scripts
+          image: ghcr.io/crystalmoonchan/g-script:20260205201228
+          envFrom:
+            - secretRef:
+                name: flask-cm-spectr-secret
+          env:
+            - name: GOOGLE_CREDENTIALS_FILE
+              value: "/secrets/credentials.json"
+          volumeMounts:
+            - name: google-credentials
+              mountPath: "/secrets"
+              readOnly: true
+      volumes:
+        - name: google-credentials
+          secret:
+            secretName: google-credentials
