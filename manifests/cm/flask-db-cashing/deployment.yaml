@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: db-cashing
-          image: ghcr.io/kirapixel/flask-db-cashing:20260203122926
+          image: ghcr.io/kirapixel/flask-db-cashing:20260205205353
           envFrom:
             - secretRef:
                 name: flask-cm-spectr-secret
