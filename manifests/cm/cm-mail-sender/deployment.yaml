@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: mail-sender
-          image: ghcr.io/kirapixel/cm-mail-sender:20251205192207
+          image: ghcr.io/kirapixel/cm-mail-sender:20260205191726
           envFrom:
             - secretRef:
                 name: flask-cm-spectr-secret
