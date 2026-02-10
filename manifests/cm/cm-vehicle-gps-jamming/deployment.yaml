@@ -17,6 +17,11 @@ spec:
       containers:
         - name: vehicle-gps-jamming
           image: ghcr.io/kirapixel/cm-vehicle-gps-jamming:20260210220340
+          env:
+            - name: SPEED_LIMIT
+              value: "80"
+            - name: AXENTA_LAST_HISTORY_POINT
+              value: "20"
           envFrom:
             - secretRef:
                 name: flask-cm-spectr-secret
