@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: vehicle-gps-jamming
-          image: ghcr.io/kirapixel/vehicle-gps-jamming:20260205191905
+          image: ghcr.io/kirapixel/cm-vehicle-gps-jamming:20260210220340
           envFrom:
             - secretRef:
                 name: flask-cm-spectr-secret
