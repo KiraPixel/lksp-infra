@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: vehicle-gps-jamming
-          image: ghcr.io/kirapixel/cm-vehicle-gps-jamming:20260210220340
+          image: ghcr.io/kirapixel/cm-vehicle-gps-jamming:20260211100943
           env:
             - name: SPEED_LIMIT
               value: "80"
