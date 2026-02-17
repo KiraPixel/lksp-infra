@@ -21,7 +21,7 @@ spec:
             - name: SPEED_LIMIT
               value: "80"
             - name: AXENTA_LAST_HISTORY_POINT
-              value: "20"
+              value: "100"
           envFrom:
             - secretRef:
                 name: flask-cm-spectr-secret
