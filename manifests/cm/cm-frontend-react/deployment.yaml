@@ -25,7 +25,7 @@ spec:
             - configMapRef:
                 name: cm-frontend-react-config
             - secretRef:
-                name: cm-frontend-react-secret
+                name: flask-cm-spectr-secret
           readinessProbe:
             httpGet:
               path: /healthz
@@ -37,7 +37,7 @@ spec:
               path: /healthz
               port: http
             initialDelaySeconds: 10
-            periodSeconds: 15
+            periodSeconds: 120
           resources:
             requests:
               cpu: 50m
