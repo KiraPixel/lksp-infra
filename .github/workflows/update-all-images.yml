@@ -52,7 +52,6 @@ jobs:
                       -H "Accept: application/vnd.github.v3+json" \
                       "https://api.github.com/users/kirapixel/packages/container/$PACKAGE/versions")
 
-            # Проверяем, что API вернул массив версий
             if echo "$RESPONSE" | jq -e 'type=="array"' >/dev/null; then
               TAG=$(echo "$RESPONSE" | jq -r '.[0].metadata.container.tags[0] // empty')
             else
@@ -63,6 +62,14 @@ jobs:
             if [ -z "$TAG" ]; then
               echo "❌ No tag found for $PACKAGE"
               continue
+            fi
+
+            if [ "$NAME" = "flask-cm-spectr" ]; then
+              if [[ "$TAG" == no-ui* ]]; then
+                DEPLOY="manifests/cm/cm-backend/deployment.yaml"
+              else
+                DEPLOY="manifests/cm/flask-cm-spectr/deployment.yaml"
+              fi
             fi
 
             NEW_IMAGE="$IMAGE:$TAG"
@@ -78,7 +85,6 @@ jobs:
             fi
           done
 
-          # Делаем один коммит и пуш, если что-то изменилось
           if git diff --cached --quiet; then
             echo "All tags are up to date"
           else
