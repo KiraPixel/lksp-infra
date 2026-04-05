@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend-cm
-          image: ghcr.io/kirapixel/flask-cm-spectr:20260216222928
+          image: ghcr.io/kirapixel/flask-cm-spectr:no-ui_20260405125351
           ports:
             - containerPort: 31500
           envFrom:
