@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: google-scripts
-          image: ghcr.io/crystalmoonchan/g-script:20260424080705
+          image: ghcr.io/crystalmoonchan/g-script:20260424135723
           envFrom:
             - secretRef:
                 name: flask-cm-spectr-secret
